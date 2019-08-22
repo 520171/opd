@@ -2,8 +2,8 @@ var mysql = require("mysql")
 var pool = mysql.createPool({
     host:"localhost",
     user:"root",
-    password:"123456",
-    database:"dbtest"
+    password:"opd123",
+    database:"db_opd"
 })//数据库连接配置
 
 function query(sql,callback){
