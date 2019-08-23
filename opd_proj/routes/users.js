@@ -42,7 +42,7 @@ router.post('/repair',  function(req, res, next) {
 router.post('/getMsg',  function(req, res, next) {
   console.log(req.body);
   let jobNo = req.body.jobNo;
-  server.showRecords('tb_user', 'tb_service', ['tb_user.*'], ['tb_service.*'], 'tb_user.u_jobno = tb_service.u_jobno', `tb_service.u_jobno = "${jobNo}"`)
+  server.showRecords('tb_user', 'tb_service', 'tb_department', ['tb_user.*'], ['tb_service.*'], ['tb_department.*'], 'tb_user.u_jobno = tb_service.u_jobno', 'tb_department.d_no = tb_user.d_no',  `tb_service.u_jobno = "${jobNo}"`)
   .then(function(msg){
     console.log(msg);
     res.json({message: msg});})

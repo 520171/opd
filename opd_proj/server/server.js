@@ -19,8 +19,8 @@ let addRepairMsg = async function(tbName, arr1, arr2){
 
 }
 
-let showRecords = async function(tbName, tbName2, arr1, arr2, on, where){
-    return await dao.selectRecords(tbName, tbName2, arr1, arr2, on, where);
+let showRecords = async function(tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where){
+    return await dao.selectRecords(tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where);
 }
 
 module.exports = {addRepairMsg, showRecords}

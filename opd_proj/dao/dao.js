@@ -36,10 +36,12 @@ let update = (tbName, updateattributename, newdata,attributename,attribute) => {
     }) 
 }//修改
 
+//多表查询报修记录
 //select tb_user.*, tb_service.* from tb_user inner join tb_service on tb_user.u_jobno = tb_service.u_jobno where tb_service.u_jobno = 1001;
-let selectRecords = (tbName, tbName2, arr1, arr2, on, where) => {
+let selectRecords = (tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where) => {
     return new Promise((resolve, reject) => {
-        db.query(`select ${arr1},${arr2} from ${tbName} inner join ${tbName2} on ${on} where ${where}`, (err, rows) => {
+        db.query(`select ${arr1},${arr2}, ${arr3} from ${tbName} inner join ${tbName2} on ${on} inner join ${tbName3} on ${on2} where ${where}`, 
+        (err, rows) => {
             if(err) {
                 reject(err);
             }
