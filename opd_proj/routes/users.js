@@ -19,11 +19,35 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.post('/msg',  function(req, res, next) {
-  server.addRepairMsg('tb_service', ['u_jobno', 's_type', 's_date', 's_msg'], [1001, 1, '123456789', "'asddsadaffacfca'"]);
-  
+router.post('/repair',  function(req, res, next) {
   console.log(req.body);
-  res.json({message: "ok"});
+  let arr1 = ['u_jobno', 's_type', 's_date', 's_msg'];
+  let arr2 = [req.body.jobNo, req.body.malfunctionNo, `'${req.body.date}'`, `'${req.body.detailMsg}'`];
+  server.addRepairMsg('tb_service', arr1, arr2)
+  .then(function(msg){
+    res.json({message: "ok"});
+    console.log(msg);})
+  .catch(function(msg){
+    res.json({message: "fail"});
+    console.log(msg);});
+  
+  // server.showRecords('tb_user', 'tb_service', ['tb_user.*'], ['tb_service.*'], 'tb_user.u_jobno = tb_service.u_jobno', 'tb_service.u_jobno = "1001"')
+  // .then(function(msg){
+  //   console.log(msg);
+  //   res.json({message: "ok"});})
+  // .catch(function(msg){res.json({message: "fail"});});
+
+});
+
+router.post('/getMsg',  function(req, res, next) {
+  console.log(req.body);
+  let jobNo = req.body.jobNo;
+  server.showRecords('tb_user', 'tb_service', ['tb_user.*'], ['tb_service.*'], 'tb_user.u_jobno = tb_service.u_jobno', `tb_service.u_jobno = "${jobNo}"`)
+  .then(function(msg){
+    console.log(msg);
+    res.json({message: msg});})
+  .catch(function(msg){res.json({message: "fail"});});
+
 });
 
 module.exports = router;

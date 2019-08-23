@@ -1,4 +1,6 @@
 const db = require('../config/db')
+
+
 let show = (tbName) => {
     return new  Promise((resolve, reject) => {
       db.query(`select * from ${tbName}`, (err, rows) => {
@@ -34,17 +36,29 @@ let update = (tbName, updateattributename, newdata,attributename,attribute) => {
     }) 
 }//修改
 
-let insert = (tbName, attributenames, attributes) => {
+//select tb_user.*, tb_service.* from tb_user inner join tb_service on tb_user.u_jobno = tb_service.u_jobno where tb_service.u_jobno = 1001;
+let selectRecords = (tbName, tbName2, arr1, arr2, on, where) => {
     return new Promise((resolve, reject) => {
-        db.query(`insert into ${tbName}(${attributenames}) values(${attributes})`, (err,rows) => {
+        db.query(`select ${arr1},${arr2} from ${tbName} inner join ${tbName2} on ${on} where ${where}`, (err, rows) => {
             if(err) {
-                console.log(err);
                 reject(err);
             }
             resolve(rows);
         })
     })
-}//增加
+}
 
-module.exports = { show, select, update, insert}
+//增加报修记录
+let insert = (tbName, attributenames, attributes) => {
+    return new Promise((resolve, reject) => {
+        db.query(`insert into ${tbName}(${attributenames}) values(${attributes})`, (err,rows) => {
+            if(err) {
+                reject(err);
+            }
+            resolve(rows);
+        })
+    })
+}
+
+module.exports = { selectRecords, insert}
 

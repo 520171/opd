@@ -9,12 +9,18 @@ const dao = require("../dao/dao");
 
 
 let addRepairMsg = async function(tbName, arr1, arr2){
-    try {
+    /* try {
         let result = await dao.insert(tbName, arr1, arr2);
-        return result;
+        result;
     } catch (e) {
         return e;
-    }
+    } */
+    return await dao.insert(tbName, arr1, arr2);
+
 }
 
-module.exports = {addRepairMsg}
+let showRecords = async function(tbName, tbName2, arr1, arr2, on, where){
+    return await dao.selectRecords(tbName, tbName2, arr1, arr2, on, where);
+}
+
+module.exports = {addRepairMsg, showRecords}
