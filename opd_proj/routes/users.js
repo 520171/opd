@@ -15,7 +15,8 @@ router.post('/uploadImage', getUload(path), function(req, res, next) {
   console.log(req.file);
   let sid = req.body.insertId;
   let url = `http://111.230.184.6:8000/uploads/${req.file.filename}`;
-  server.addImgUrl('tb_annex', ['s_id', 'a_url'], [`'${sid}'`, `'${url}'`])
+  let isImg = ('video/mp4' == req.file.mimetype ? 0:1);
+  server.addImgUrl('tb_annex', ['s_id', 'a_url', 'a_isImg'], [`'${sid}'`, `'${url}'`, isImg])
   .then(function(msg){
     res.json({message: "ok", insertId: msg.insertId});
     console.log(msg);
