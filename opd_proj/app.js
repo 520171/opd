@@ -45,4 +45,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// app.get('/public/uploads/*', function (req, res) {
+//   res.sendFile( __dirname + "/" + req.url );
+//   console.log("Request for " + req.url + " received.");
+// });
+
 module.exports = app;

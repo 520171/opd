@@ -3,13 +3,14 @@ var express = require('express');
 var router = express.Router();
 var getUload = require('../handleUploads/handleUpload');
 var server = require('../server/server');
+// var upload = multer({ dest: 'uploads/'}) // 文件储存路径
+// upload.single('file')//中的参数是post提交的文件的key
 
-//var upload = multer({ dest: 'uploads/'}) // 文件储存路径
-//upload.single('file')中的参数是post提交的文件的key
+let path = 'uploads';
 
 
 
-router.post('/uploadImage', getUload('bbb').single('file'), function(req, res, next) {
+router.post('/uploadImage', getUload(path), function(req, res, next) {
   console.log(req.body);
   res.json({message: "ok"});
 });
@@ -49,5 +50,8 @@ router.post('/getMsg',  function(req, res, next) {
   .catch(function(msg){res.json({message: "fail"});});
 
 });
+
+
+
 
 module.exports = router;
