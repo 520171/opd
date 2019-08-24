@@ -1,7 +1,7 @@
 const dao = require("../dao/dao");
 
 /*
-     添加报修记录
+     添加记录
      tbName：表名
      arr1：字段名数组
      arr2：字段值数组
@@ -19,8 +19,12 @@ let addRepairMsg = async function(tbName, arr1, arr2){
 
 }
 
+let addImgUrl = function(tbName, arr1, arr2){
+    return addRepairMsg(tbName, arr1, arr2);
+}
+
 let showRecords = async function(tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where){
     return await dao.selectRecords(tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where);
 }
 
-module.exports = {addRepairMsg, showRecords}
+module.exports = {addRepairMsg, showRecords, addImgUrl}

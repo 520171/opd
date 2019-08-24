@@ -36,6 +36,8 @@ let update = (tbName, updateattributename, newdata,attributename,attribute) => {
     }) 
 }//修改
 
+
+
 //多表查询报修记录
 //select tb_user.*, tb_service.* from tb_user inner join tb_service on tb_user.u_jobno = tb_service.u_jobno where tb_service.u_jobno = 1001;
 let selectRecords = (tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where) => {
