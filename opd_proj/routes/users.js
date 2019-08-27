@@ -8,6 +8,10 @@ var server = require('../server/server');
 
 let path = 'uploads';
 
+/* GET users listing. */
+router.get('/', function(req, res, next) {
+  res.send('respond with a resource');
+});
 
 //上传报修附件，并将附件地址存入数据库
 router.post('/uploadImage', getUload(path), function(req, res, next) {
@@ -26,16 +30,11 @@ router.post('/uploadImage', getUload(path), function(req, res, next) {
     console.log(msg);});
 });
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
 //提交报修请求
 router.post('/repair',  function(req, res, next) {
   //console.log(req.body);
   let arr1 = ['u_jobno', 's_type', 's_date', 's_msg'];
-  let arr2 = [req.body.jobNo, req.body.malfunctionNo, `'${req.body.date}'`, `'${req.body.detailMsg}'`];
+  let arr2 = [`'${req.body.jobNo}'`, `'${req.body.malfunctionNo}'`, `'${req.body.date}'`, `'${req.body.detailMsg}'`];
   server.addRepairMsg('tb_service', arr1, arr2)
   .then(function(msg){
     res.json({message: "ok", insertId: msg.insertId});
@@ -47,6 +46,24 @@ router.post('/repair',  function(req, res, next) {
     //console.log('fail');
     console.log(msg);});
 });
+
+
+//发送留言记录
+router.post('/sendDialog',  function(req, res, next) {
+  console.log(req.body);
+  server.addDialog('tb_dialog', ['s_id', 'u_jobno', 'da_msg', 'da_date'], [`'${req.body.sid}'`, `'${req.body.jobNo}'`, `'${req.body.dialog}'`, `'${req.body.date}'`])
+  .then(function(msg){
+    console.log(msg);
+    return server.showDialogs(`(select da_id, da_msg, u_jobno, da_date from tb_dialog where s_id = '${req.body.sid}') newTbl`, 'tb_user', ['da_msg', 'u_name', 'newTbl.u_jobno', 'da_date'], 'newTbl.u_jobno = tb_user.u_jobno order by da_id desc')
+  }).then(function (msg){
+    console.log(msg);
+    res.json({message: msg});})
+  .catch(function(msg){
+    console.log(msg);
+    res.json({message: "fail"});});
+});
+
+//////////////////////////查询///////////////////////////////////////////////////
 
 //获取报修记录
 router.post('/getMsg',  function(req, res, next) {
@@ -79,7 +96,7 @@ router.post('/getDialogs',  function(req, res, next) {
   console.log(req.body);
   let sid = req.body.sid;
   console.log(sid);
-  server.showDialogs(`(select da_msg, u_jobno, da_date from tb_dialog where s_id = '${sid}') newTbl`, 'tb_user', ['da_msg', 'u_name', 'newTbl.u_jobno', 'da_date'], 'newTbl.u_jobno = tb_user.u_jobno')
+  server.showDialogs(`(select da_id, da_msg, u_jobno, da_date from tb_dialog where s_id = '${sid}') newTbl`, 'tb_user', ['da_msg', 'u_name', 'newTbl.u_jobno', 'da_date'], 'newTbl.u_jobno = tb_user.u_jobno order by da_id desc')
   .then(function(msg){
     console.log(msg);
     res.json({message: msg});})
@@ -87,20 +104,6 @@ router.post('/getDialogs',  function(req, res, next) {
     console.log(msg);
     res.json({message: "fail"});});
 });
-
-
-//发送留言记录
-router.post('/sendDialog',  function(req, res, next) {
-  console.log(req.body);
-  // server.showDialogs(`(select da_msg, u_jobno, da_date from tb_dialog where s_id = '${sid}') newTbl`, 'tb_user', ['da_msg', 'u_name', 'newTbl.u_jobno', 'da_date'], 'newTbl.u_jobno = tb_user.u_jobno')
-  // .then(function(msg){
-  //   console.log(msg);
-  //   res.json({message: msg});})
-  // .catch(function(msg){
-  //   console.log(msg);
-  //   res.json({message: "fail"});});
-});
-
 
 
 

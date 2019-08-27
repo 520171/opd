@@ -38,6 +38,8 @@ let showDialogs = async function(tbName, tbName2, colNames, on, attributename, a
 }
 
 //将留言记录写入持久层
+let addDialog = function(tbName, arr1, arr2){
+    return addRepairMsg(tbName, arr1, arr2);
+}
 
-
-module.exports = {addRepairMsg, showRecords, addImgUrl, showAnnex, showDialogs}
+module.exports = {addRepairMsg, showRecords, addImgUrl, showAnnex, showDialogs, addDialog}
