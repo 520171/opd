@@ -45,6 +45,10 @@ let showDialogs = async function(sid){
     return await dao.selectDialogs(sid);
 }
 
+let login = async function( attributename, attribute, attributename2, attribute2){
+    return await dao.login( attributename, attribute, attributename2, attribute2);
+}
 
 
-module.exports = {addRepairMsg, showRecords, addImgUrl, showAnnex, showDialogs, addDialog}
+
+module.exports = {addRepairMsg, showRecords, addImgUrl, showAnnex, showDialogs, addDialog, login}

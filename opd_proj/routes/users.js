@@ -94,7 +94,10 @@ router.post('/getAnnex',  function(req, res, next) {
 
 });
 
-//获取留言记录
+//获取留言记录!!!!
+
+
+
 router.post('/getDialogs',  function(req, res, next) {
   console.log(req.body);
   let sid = req.body.sid;
@@ -108,6 +111,17 @@ router.post('/getDialogs',  function(req, res, next) {
     res.json({message: "fail"});});
 });
 
+//小程序端登陆验证
+router.post('/login',  function(req, res, next) {
+  console.log(req.body);
+  server.login('u_name', req.body.name, 'u_jobno', req.body.jobNo)
+  .then(function(msg){
+    console.log(msg);
+    res.json({message: 1 === msg.length?'ok':'fail', msg: msg});})
+  .catch(function(msg){
+    console.log(msg);
+    res.json({message: "fail"});});
+});
 
 
 module.exports = router;

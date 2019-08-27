@@ -71,11 +71,27 @@ let insert = (tbName, attributenames, attributes) => {
     })
 }
 
-//查询单个字段!!!
+//单表查询!!!
 let select = (tbName, colNames, attributename, attribute) => {
     let sql = 'select ?? from ?? where ?? = ?';
     let replaces = [colNames, tbName, attributename, attribute];
     sql = mysql.format(sql, replaces);
+    return new Promise((resolve, reject) => {
+        db.query(sql, (err, rows) => {
+            if(err) {
+                reject(err);
+            }
+            resolve(rows);
+        })
+    })
+}
+
+//单表查询!!! 登陆
+let login = (attributename, attribute, attributename2, attribute2) => {
+    let sql = 'select tb_user.*, tb_department.* from tb_user inner join tb_department on tb_department.d_no = tb_user.d_no where ?? = ? and ?? =?';
+    let replaces = [attributename, attribute, attributename2, attribute2];
+    sql = mysql.format(sql, replaces);
+    console.log(sql);
     return new Promise((resolve, reject) => {
         db.query(sql, (err, rows) => {
             if(err) {
@@ -102,5 +118,5 @@ let selectDialogs = (sid) => {
 }
 
 
-module.exports = { selectRecords, insert, select, selectDialogs}
+module.exports = { selectRecords, insert, select, selectDialogs, login}
 
