@@ -19,12 +19,25 @@ let addRepairMsg = async function(tbName, arr1, arr2){
 
 }
 
+//将附件路径写入持久层
 let addImgUrl = function(tbName, arr1, arr2){
     return addRepairMsg(tbName, arr1, arr2);
 }
 
+//获取报修记录
 let showRecords = async function(tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where){
     return await dao.selectRecords(tbName, tbName2, tbName3, arr1, arr2, arr3, on, on2, where);
 }
 
-module.exports = {addRepairMsg, showRecords, addImgUrl}
+let showAnnex = async function(tbName, colName, attributename, attribute){
+    return await dao.select(tbName, colName, attributename, attribute);
+}
+
+let showDialogs = async function(tbName, tbName2, colNames, on, attributename, attribute){
+    return await dao.selectDialogs(tbName, tbName2, colNames, on, attributename, attribute);
+}
+
+//将留言记录写入持久层
+
+
+module.exports = {addRepairMsg, showRecords, addImgUrl, showAnnex, showDialogs}

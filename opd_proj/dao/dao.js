@@ -14,7 +14,7 @@ let show = (tbName) => {
 
 }//显示全部 （select*）
   
-let select = (tbName, attributename, attribute) => {
+let selectOne = (tbName, attributename, attribute) => {
     return new Promise((resolve, reject) => {
         db.query(`select * from ${tbName} where ${attributename} = '${attribute}'`, (err, rows) => {
         if(err) {
@@ -23,7 +23,7 @@ let select = (tbName, attributename, attribute) => {
         resolve(rows);
         })
     })
-}//查询一行（传参)
+}
 
 let update = (tbName, updateattributename, newdata,attributename,attribute) => {
     return new Promise((resolve, reject) => {
@@ -64,5 +64,30 @@ let insert = (tbName, attributenames, attributes) => {
     })
 }
 
-module.exports = { selectRecords, insert}
+//查询单个字段
+let select = (tbName, colNames, attributename, attribute) => {
+    return new Promise((resolve, reject) => {
+        db.query(`select ${colNames} from ${tbName} where ${attributename} = '${attribute}'`, (err, rows) => {
+            if(err) {
+                reject(err);
+            }
+            resolve(rows);
+        })
+    })
+}
+
+//查询留言记录
+let selectDialogs = (tbName, tbName2, colNames, on) => {
+    return new Promise((resolve, reject) => {
+        db.query(`select ${colNames} from ${tbName}  inner join ${tbName2} on ${on}`, (err, rows) => {
+            if(err) {
+                reject(err);
+            }
+            resolve(rows);
+        })
+    })
+}
+
+
+module.exports = { selectRecords, insert, select, selectDialogs}
 
