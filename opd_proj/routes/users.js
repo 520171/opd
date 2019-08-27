@@ -13,14 +13,14 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-//上传报修附件，并将附件地址存入数据库
+//上传报修附件，并将附件地址存入数据库 !!!
 router.post('/uploadImage', getUload(path), function(req, res, next) {
   console.log(req.body);
   console.log(req.file);
   let sid = req.body.insertId;
   let url = `http://111.230.184.6:8000/uploads/${req.file.filename}`;
   let isImg = ('video/mp4' == req.file.mimetype ? 0:1);
-  server.addImgUrl('tb_annex', ['s_id', 'a_url', 'a_isImg'], [`'${sid}'`, `'${url}'`, isImg])
+  server.addImgUrl('tb_annex', ['s_id', 'a_url', 'a_isImg'], [sid, url, isImg])
   .then(function(msg){
     res.json({message: "ok", insertId: msg.insertId});
     console.log(msg);
@@ -30,11 +30,11 @@ router.post('/uploadImage', getUload(path), function(req, res, next) {
     console.log(msg);});
 });
 
-//提交报修请求
+//提交报修请求 !!!
 router.post('/repair',  function(req, res, next) {
   //console.log(req.body);
   let arr1 = ['u_jobno', 's_type', 's_date', 's_msg'];
-  let arr2 = [`'${req.body.jobNo}'`, `'${req.body.malfunctionNo}'`, `'${req.body.date}'`, `'${req.body.detailMsg}'`];
+  let arr2 = [req.body.jobNo, req.body.malfunctionNo, req.body.date, req.body.detailMsg];
   server.addRepairMsg('tb_service', arr1, arr2)
   .then(function(msg){
     res.json({message: "ok", insertId: msg.insertId});
@@ -48,13 +48,13 @@ router.post('/repair',  function(req, res, next) {
 });
 
 
-//发送留言记录
+//发送留言记录 !!!
 router.post('/sendDialog',  function(req, res, next) {
   console.log(req.body);
-  server.addDialog('tb_dialog', ['s_id', 'u_jobno', 'da_msg', 'da_date'], [`'${req.body.sid}'`, `'${req.body.jobNo}'`, `'${req.body.dialog}'`, `'${req.body.date}'`])
+  server.addDialog('tb_dialog', ['s_id', 'u_jobno', 'da_msg', 'da_date'], [req.body.sid, req.body.jobNo, req.body.dialog, req.body.date])
   .then(function(msg){
     console.log(msg);
-    return server.showDialogs(`(select da_id, da_msg, u_jobno, da_date from tb_dialog where s_id = '${req.body.sid}') newTbl`, 'tb_user', ['da_msg', 'u_name', 'newTbl.u_jobno', 'da_date'], 'newTbl.u_jobno = tb_user.u_jobno order by da_id desc')
+    return server.showDialogs(req.body.sid);
   }).then(function (msg){
     console.log(msg);
     res.json({message: msg});})
@@ -65,20 +65,21 @@ router.post('/sendDialog',  function(req, res, next) {
 
 //////////////////////////查询///////////////////////////////////////////////////
 
-//获取报修记录
+//获取报修记录!!!
 router.post('/getMsg',  function(req, res, next) {
   console.log(req.body);
   let jobNo = req.body.jobNo;
-  server.showRecords('tb_user', 'tb_service', 'tb_department', ['tb_user.*'], ['tb_service.*'], ['tb_department.*'], 'tb_user.u_jobno = tb_service.u_jobno', 'tb_department.d_no = tb_user.d_no',  
-  `tb_service.u_jobno = "${jobNo}" order by tb_service.s_id desc`)
+  server.showRecords(jobNo)
   .then(function(msg){
     console.log(msg);
     res.json({message: msg});})
-  .catch(function(msg){res.json({message: "fail"});});
+  .catch(function(msg){
+    console.log(msg);
+    res.json({message: "fail"});});
 
 });
 
-//获取报修附件
+//获取报修附件!!!
 router.post('/getAnnex',  function(req, res, next) {
   console.log(req.body);
   let sid = req.body.sid;
@@ -87,7 +88,9 @@ router.post('/getAnnex',  function(req, res, next) {
   .then(function(msg){
     console.log(msg);
     res.json({message: msg});})
-  .catch(function(msg){res.json({message: "fail"});});
+  .catch(function(msg){
+    console.log(msg);
+    res.json({message: "fail"});});
 
 });
 
@@ -96,7 +99,7 @@ router.post('/getDialogs',  function(req, res, next) {
   console.log(req.body);
   let sid = req.body.sid;
   console.log(sid);
-  server.showDialogs(`(select da_id, da_msg, u_jobno, da_date from tb_dialog where s_id = '${sid}') newTbl`, 'tb_user', ['da_msg', 'u_name', 'newTbl.u_jobno', 'da_date'], 'newTbl.u_jobno = tb_user.u_jobno order by da_id desc')
+  server.showDialogs(sid)
   .then(function(msg){
     console.log(msg);
     res.json({message: msg});})
