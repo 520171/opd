@@ -1,8 +1,8 @@
 //users路由
 var express = require('express');
 var router = express.Router();
-var getUload = require('../handleUploads/handleUpload');
-var server = require('../server/server');
+const getUload = require('../handleUploads/handleUpload');
+const server = require('../server/server').users;
 // var upload = multer({ dest: 'uploads/'}) // 文件储存路径
 // upload.single('file')//中的参数是post提交的文件的key
 
@@ -52,20 +52,21 @@ router.post('/repair',  function(req, res, next) {
 router.post('/sendDialog',  function(req, res, next) {
   console.log(req.body);
   server.addDialog('tb_dialog', ['s_id', 'u_jobno', 'da_msg', 'da_date'], [req.body.sid, req.body.jobNo, req.body.dialog, req.body.date])
-  .then(function(msg){
+    .then(function(msg){
     console.log(msg);
     return server.showDialogs(req.body.sid);
-  }).then(function (msg){
+  })
+    .then(function (msg){
     console.log(msg);
     res.json({message: msg});})
-  .catch(function(msg){
+    .catch(function(msg){
     console.log(msg);
     res.json({message: "fail"});});
 });
 
 //////////////////////////查询///////////////////////////////////////////////////
 
-//获取报修记录!!!
+// 获取报修记录!!!
 router.post('/getMsg',  function(req, res, next) {
   console.log(req.body);
   let jobNo = req.body.jobNo;
