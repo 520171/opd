@@ -7,8 +7,22 @@ var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var history =  require('connect-history-api-fallback'); // 使用connect-history-api-fallback中间件
 
 var app = express();
+
+// 使用connect-history-api-fallback中间件
+app.use(history({
+  htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
+  rewrites: [
+    {
+      from: /^\/.*$/,
+      to: function (context) {
+        return "/";
+      }
+    },
+  ]
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,7 +32,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/dist')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -44,11 +58,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// app.get('/public/uploads/*', function (req, res) {
-//   res.sendFile( __dirname + "/" + req.url );
-//   console.log("Request for " + req.url + " received.");
-// });
 
 
 module.exports = app;
