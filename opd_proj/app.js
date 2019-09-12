@@ -34,8 +34,8 @@ app.all("*", (req, res, next) => {
     next()
   }else{
     // console.log('http', req.host)
-    // console.log(`https://${req.host}${req.path}`)
-    res.redirect(307, `https://${req.host}${req.path}`)
+    console.log(`https://${req.hostname}:4433${req.path}`)
+    res.redirect(307, `https://${req.hostname}:4433${req.path}`)
   }
 });
 
