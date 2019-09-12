@@ -57,7 +57,7 @@ router.post('/listpage', function (req, res, next){
 // 添加员工
 router.post('/addUser', function (req, res, next){
   console.log(req.body)
-  server.addUser('tb_user', ['u_jobno', 'u_name', 'd_no', 'u_gender'], [req.body.params.jobNum, req.body.params.name, req.body.params.d_no, req.body.params.sex])
+  server.addUser('tb_user', ['u_jobno', 'u_name', 'd_no', 'u_gender', 'u_flag'], [req.body.params.jobNum, req.body.params.name, req.body.params.d_no, req.body.params.sex, req.body.params.u_flag])
     .then((msg) => {
       console.log(msg);
       res.json({code: 200, msg: "添加部门成功"});
@@ -85,7 +85,7 @@ router.post('/removeUsers', function (req, res, next){
 // 更新员工
 router.post('/updateUser', function (req, res, next){
   console.log(req.body)
-  server.editUser(req.body.params.u_name, req.body.params.u_jobno, req.body.params.d_no, req.body.params.u_gender, req.body.params.u_id )
+  server.editUser(req.body.params.u_name, req.body.params.u_jobno, req.body.params.d_no, req.body.params.u_gender, req.body.params.u_flag, req.body.params.u_id )
     .then((msg) => {
       console.log(msg);
       res.json({code: 200, msg: "更新员工成功"});

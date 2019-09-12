@@ -11,6 +11,7 @@ var history =  require('connect-history-api-fallback'); // 使用connect-history
 
 var app = express();
 
+
 // 使用connect-history-api-fallback中间件
 app.use(history({
   htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
@@ -20,7 +21,7 @@ app.use(history({
       to: function (context) {
         return "/";
       }
-    },
+    }
   ]
 }));
 
@@ -28,11 +29,22 @@ app.use(history({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.all("*", (req, res, next) => {
+  if('https' === req.protocol){
+    next()
+  }else{
+    // console.log('http', req.host)
+    // console.log(`https://${req.host}${req.path}`)
+    res.redirect(307, `https://${req.host}${req.path}`)
+  }
+});
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public/dist')));
+app.use(express.static(path.join(__dirname, 'public/uploads')));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
@@ -59,5 +71,4 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-
-module.exports = app;
+module.exports = app

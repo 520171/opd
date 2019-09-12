@@ -6,7 +6,7 @@ const server = require('../server/server').users;
 // var upload = multer({ dest: 'uploads/'}) // 文件储存路径
 // upload.single('file')//中的参数是post提交的文件的key
 
-let path = 'uploads';
+let path = 'medias';
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -18,7 +18,7 @@ router.post('/uploadImage', getUload(path), function(req, res, next) {
   console.log(req.body);
   console.log(req.file);
   let sid = req.body.insertId;
-  let url = `http://www.opdgr.cn:8000/uploads/${req.file.filename}`;
+  let url = `https://www.opdgr.cn/${path}/${req.file.filename}`;
   let isImg = ('video/mp4' == req.file.mimetype ? 0:1);
   server.addImgUrl('tb_annex', ['s_id', 'a_url', 'a_isImg'], [sid, url, isImg])
   .then(function(msg){
@@ -26,8 +26,8 @@ router.post('/uploadImage', getUload(path), function(req, res, next) {
     console.log(msg);
   })
   .catch(function(msg){
-    res.json({message: "fail"});
-    console.log(msg);});
+    res.json({message: "fail"})
+    console.log(msg)})
 });
 
 //提交报修请求 !!!
@@ -69,12 +69,15 @@ router.post('/sendDialog',  function(req, res, next) {
 // 获取报修记录!!!
 router.post('/getMsg',  function(req, res, next) {
   console.log(req.body);
-  let jobNo = req.body.jobNo;
-  server.showRecords(jobNo)
-  .then(function(msg){
+  const jobNo = req.body.jobNo;
+  server.checkUserType('tb_user', 'u_flag', 'u_jobno', jobNo)
+    .then(msg => {
+        return server.showRecords(req.body.jobNo, msg[0].u_flag);
+    })
+    .then(function(msg){
     console.log(msg);
     res.json({message: msg});})
-  .catch(function(msg){
+    .catch(function(msg){
     console.log(msg);
     res.json({message: "fail"});});
 

@@ -33,11 +33,11 @@ const addDialog = function(tbName, arr1, arr2){
 /////////////////////////////////////////////////////////////////
 
 //获取报修记录!!!
-const showRecords = function(jobNo){
-    return dao.selectRecords(jobNo);
+const showRecords = function(jobNo, flag){
+    return dao.selectRecords(jobNo, flag);
 }
 
-let showAnnex = function(tbName, colName, attributename, attribute){
+const showAnnex = function(tbName, colName, attributename, attribute){
     return dao.select(tbName, colName, attributename, attribute);
 }
 
@@ -69,6 +69,11 @@ const checkAll = function (tblName) {
     return dao.show(tblName)
 }
 
+// 查询用户类型
+const checkUserType = function(tbName, colName, attributename, attribute){
+  return dao.select(tbName, colName, attributename, attribute)
+}
+
 // 新增员工
 const addUser = function(tbName, arr1, arr2){
     return addRepairMsg(tbName, arr1, arr2);
@@ -80,8 +85,8 @@ const removeUsers = function(tbName, attributename, attributes){
 }
 
 //更新员工
-const editUser = function(attribute, attribute2, attribute3, attribute4, attribute5){
-    return dao.updateUser(attribute, attribute2, attribute3, attribute4, attribute5)
+const editUser = function(attribute, attribute2, attribute3, attribute4, attribute5, attribute6){
+    return dao.updateUser(attribute, attribute2, attribute3, attribute4, attribute5, attribute6)
 }
 
 // //////////////////////////////部门管理///////////////////////
@@ -116,8 +121,9 @@ const removeRepairs = function(tbName, attributename, attributes){
 
 
 
+
 module.exports.users = { checkAll, addRepairMsg, showRecords, addImgUrl, showAnnex, showDialogs,
-    addDialog, login }
+    addDialog, login, checkUserType }
 module.exports.index = {logSys, checkAllUsers, checkTotalNum, checkAllDepartments, addDepartment,
     removeDepartments, editDepartment, addUser, removeUsers, checkAll, editUser, checkRepairs,
     checkTotalServicesNum, removeRepairs }

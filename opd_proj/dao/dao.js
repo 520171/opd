@@ -56,10 +56,12 @@ const deleteRows = (tbName, attributename, attributes) => {
 
 
 //多表查询报修记录!!!
-//select tb_user.*, tb_service.* from tb_user inner join tb_service on tb_user.u_jobno = tb_service.u_jobno where tb_service.u_jobno = 1001;
-const selectRecords = (jobNo) => {
+// select tb_user.*, tb_service.* from tb_user inner join tb_service on tb_user.u_jobno = tb_service.u_jobno where tb_service.u_jobno = 1001;
+const selectRecords = (jobNo, flag) => {
     return new Promise((resolve, reject) => {
-        let sql = 'select tb_user.*, tb_service.*, tb_department.* from tb_user inner join tb_service on tb_user.u_jobno =tb_service.u_jobno inner join tb_department on tb_department.d_no = tb_user.d_no where tb_service.u_jobno = ? order by tb_service.s_id desc';
+        let sql = flag? 'select tb_user.*, tb_service.*, tb_department.* from tb_user inner join tb_service on tb_user.u_jobno =tb_service.u_jobno inner join tb_department on tb_department.d_no = tb_user.d_no order by tb_service.s_id desc' :
+          'select tb_user.*, tb_service.*, tb_department.* from tb_user inner join tb_service on tb_user.u_jobno =tb_service.u_jobno inner join tb_department on tb_department.d_no = tb_user.d_no where tb_service.u_jobno = ? order by tb_service.s_id desc'
+
         let replaces = [jobNo];
         sql = mysql.format(sql, replaces);
         console.log(sql);
@@ -186,10 +188,10 @@ const selectTotalNum = (tblName, key , colName, name) => {
 }
 
 // 更新员工
-const updateUser = (attribute, attribute2, attribute3, attribute4, attribute5) => {
+const updateUser = (attribute, attribute2, attribute3, attribute4, attribute5, attribute6) => {
     return new  Promise((resolve, reject) => {
-        let sql = 'update tb_user set u_name = ?, u_jobno = ?, d_no = ?, u_gender = ? where u_id = ?';
-        const replaces = [attribute, attribute2, attribute3, attribute4, attribute5]
+        let sql = 'update tb_user set u_name = ?, u_jobno = ?, d_no = ?, u_gender = ?, u_flag = ? where u_id = ?';
+        const replaces = [attribute, attribute2, attribute3, attribute4, attribute5, attribute6]
         sql = mysql.format(sql, replaces)
         db.query(sql, (err, rows) => {
             if(err) {
